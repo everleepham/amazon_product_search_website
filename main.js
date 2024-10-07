@@ -1,45 +1,27 @@
 import "./css/bootstrap.min.css";
-import "./js/bootstrap.bundle.min";
+import "./js/bootstrap.bundle.min.js";
 
-const loadAllDishes = async () => {
-const url = `https://chinese-food-db.p.rapidapi.com/all-dishes`;
-const options = {
-	method: 'GET',
-	headers: {
-		'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
-		'x-rapidapi-host': 'chinese-food-db.p.rapidapi.com'
-	}
-};
-
-try {
-	const response = await fetch(url, options);
-	const result = await response.json();
-	console.log(result);
-	} catch (error) {
-	console.error(error);
-	}
-};
-
-document.getElementById('searchButton').addEventListener('click', () => {
-	const query = document.getElementById('searchInput').value;
-	fetchData(query);
-	});
-
-	let dishList = []; 
-
-window.onload = async () => {
-		dishList = await loadAllDishes();
-		console.log(dishList);  
-	};
-
-const searchByName = (query) => {
-	return dishList.filter(dish => dish.name.toLowerCase().includes(query.toLowerCase()));
+const fetchData = async (query) => {
+	const url = `https://real-time-amazon-data.p.rapidapi.com/product-category-list?country=${query}`;
+	const options = {
+		method: 'GET',
+		headers: {
+			'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
+			'x-rapidapi-host': 'real-time-amazon-data.p.rapidapi.com'
+		}
 	};
 	
-document.getElementById('searchButton').addEventListener('click', () => {
-	const query = document.getElementById('searchInput').value.trim();
-	const results = searchByName(query);  
-	console.log(results);  
-	displayResults(results);
-	});
+	try {
+		const response = await fetch(url, options);
+		const result = await response.json();
+		console.log(result);
+		handleData(result);
+	} catch (error) {
+		console.error(error);
+	}
+};
 
+fetchData();
+
+document.getElementById("searchButton").addEventListener("click", () => {
+  const query = d
