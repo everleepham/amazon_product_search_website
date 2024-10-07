@@ -1,30 +1,45 @@
-import "./css/bootstrap.min.css"
-import "./js/bootstrap.bundle.min"
+import "./css/bootstrap.min.css";
+import "./js/bootstrap.bundle.min";
 
-const URL = "https://jsonplaceholder.typicode.com/users"
-fetch(URL)
-	.then((res) => {
-		if (!res.ok) {
-			return (container.textContent = "no user found with this data")
-        }
-        res.json().then((json) => {
-            console.log(json)
-            handleData(json) 
-        })
-    })
-    
+const loadAllDishes = async () => {
+const url = `https://chinese-food-db.p.rapidapi.com/all-dishes`;
+const options = {
+	method: 'GET',
+	headers: {
+		'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
+		'x-rapidapi-host': 'chinese-food-db.p.rapidapi.com'
+	}
+};
 
-function handleData(json) {
-    json.forEach(user => {
-        document.querySelector(".dynamic_data").innerHTML += `<div class="col">
-        <artricle class="card">
-            <div class="card-body">
-                <p>${user.name}</p>
-                <p>${user.email}</p>
-            </div>
-        </artricle>
-    </div>`
-    });
-    console.log(typeof json)
-}
+try {
+	const response = await fetch(url, options);
+	const result = await response.json();
+	console.log(result);
+	} catch (error) {
+	console.error(error);
+	}
+};
+
+document.getElementById('searchButton').addEventListener('click', () => {
+	const query = document.getElementById('searchInput').value;
+	fetchData(query);
+	});
+
+	let dishList = []; 
+
+window.onload = async () => {
+		dishList = await loadAllDishes();
+		console.log(dishList);  
+	};
+
+const searchByName = (query) => {
+	return dishList.filter(dish => dish.name.toLowerCase().includes(query.toLowerCase()));
+	};
+	
+document.getElementById('searchButton').addEventListener('click', () => {
+	const query = document.getElementById('searchInput').value.trim();
+	const results = searchByName(query);  
+	console.log(results);  
+	displayResults(results);
+	});
 
