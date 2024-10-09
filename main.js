@@ -24,4 +24,26 @@ const fetchData = async (query) => {
 fetchData();
 
 document.getElementById("searchButton").addEventListener("click", () => {
-  const query = d
+  const query = document.getElementById("searchInput").value;
+  fetchData(query);
+});
+
+function handleData(data) {
+	const container = document.querySelector(".dynamic_data");
+	container.innerHTML = ""; 
+	const categories = data.data;
+	if (categories && categories.length > 0) {
+	  categories.forEach(item => {
+		container.innerHTML += `
+		  <div class="col">
+			<article class="card">
+			  <div class="card-body">
+				<p><strong>Category Name:</strong> ${item.name}</p>
+				<p><strong>Category ID:</strong> ${item.id}</p>
+			  </div>
+			</article>
+		  </div>`;
+	  });
+	} 
+  }
+  
